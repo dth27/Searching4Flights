@@ -82,7 +82,13 @@ public class DatabaseManager {
         return theFlights;
     }
   
-    //Updates the Passenger table with the parameters that come in (makes a new row) 
+     /**
+      * Updates the Passenger table with the parameters that come in (makes a new row) 
+      * @param name
+      * @param phoneno
+      * @param ssno
+      * @param bookingid 
+      */
     public void updatePassenger(String name, Long phoneno, Long ssno, int bookingid){
         System.out.println("Fer inn í updatePassenger");
         Connection con = null;
@@ -123,7 +129,11 @@ public class DatabaseManager {
         }
     }
         
-    //Updates the value "availableSeats" in the table Scedule for the flight in question
+    /**
+     * Updates the value "availableSeats" in the table Schedule for the flight in question
+     * @param flightId
+     * @param numbofPass 
+     */
     public void updateAvailableSeats(int flightId, int numbofPass){
         System.out.println("Fer inn í updateAvailableSeats");
         Connection con = null;
@@ -173,7 +183,11 @@ public class DatabaseManager {
         }
     }
 
-    //Finds the value for availableSeats in the table Schedule for the flight in question and returns it
+    /**
+     * Finds the value for availableSeats in the table Schedule for the flight in question and returns it
+     * @param flightId
+     * @return 
+     */
     public int availableSeats(int flightId){
         Connection con = null;
         Statement statement = null;
@@ -210,7 +224,11 @@ public class DatabaseManager {
         return 0;
     }
     
-    //TODO tjekka
+    /**
+     * 
+     * @param SSno
+     * @return 
+     */
     public Passenger getPassenger(int SSno){
         Connection con = null;
         Statement statement = null;
@@ -248,8 +266,13 @@ public class DatabaseManager {
         }
         return null;
     }
-    
-    //Updates the booking table in flug.db with the new booking
+     
+    /**
+     * Updates the booking table in flug.db with the new booking
+     * @param bookingID
+     * @param flightID
+     * @param numbofpass 
+     */
      public void createBooking(int bookingID, int flightID, int numbofpass){
          System.out.println("Fer inn í createBooking í DatabaseManager");
         Connection con = null;
@@ -289,10 +312,13 @@ public class DatabaseManager {
         }catch(Exception e){
             System.out.println("Villa i createBooking: " + e);
         }
-    }
-     
+    }     
     
-     //Returns an ArrayList of ArrayList with information for the Booking Ticket
+     /**
+      * Returns an ArrayList of ArrayList with information for the Booking Ticket
+      * @param bookingno
+      * @return 
+      */
      public ArrayList returnBooking(int bookingno){
          //sækja allt sem þarf fyrir bookingno (flug, passengers o.s.fr.)
          Connection con = null;
@@ -382,8 +408,11 @@ public class DatabaseManager {
         }
          return theList;
      }
-     
-   //Finds the largest booking number so far and returns it
+       
+     /**
+      * Finds the largest booking number so far and returns it
+      * @return 
+      */
     public int getMaxBookingNo(){
         Connection con = null;
         Statement statement = null;

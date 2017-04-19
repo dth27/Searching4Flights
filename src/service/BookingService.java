@@ -14,11 +14,9 @@ import storage.*;
 public class BookingService {
     Booking booking;
     DatabaseManager GretaTheDBManager = new DatabaseManager();
-    
-    
-   //Takes in the parameters from the BookingInfo Panel, to make a booking for the chosen flight
+
     /**
-     * 
+     * Takes in the parameters from the BookingInfo Panel, to make a booking for the chosen flight
      * @param flightId
      * @param PassName
      * @param SSno
@@ -49,9 +47,10 @@ public class BookingService {
         }
         return -1;
     }
-       //Calls the DataBaseManager that updates the Passenger table in flug.db for each passenger and updates the seat availability for this flight
+       
     /**
-     * 
+     * Calls the DataBaseManager that updates the Passenger table in flug.db for each 
+     *  passenger and updates the seat availability for this flight
      * @param flightId
      * @param numbofPass
      * @param Passname
@@ -66,9 +65,9 @@ public class BookingService {
             GretaTheDBManager.updateAvailableSeats(flightId, numbofPass);
      }
         
- //Calls the DataBaseManager that creates a new Booking by calling the DataBaseManager   
+    
      /**
-      * 
+      * Calls the DataBaseManager that creates a new Booking by calling the DataBaseManager
       * @param numbofPass
       * @param flightId
       * @param bookingno 
@@ -77,44 +76,27 @@ public class BookingService {
          System.out.println("fer inn í createBooking í BookingService");
          GretaTheDBManager.createBooking(bookingno, flightId, numbofPass); 
      }
-     
-     //TODO
-     public ArrayList getFlight(int bookingNo){
-         return null;
-     }
-     //TODO
-     public ArrayList getPassenger(int bookingNo){
-         return null;
-     }
 
      //TODO 
      public boolean updatePayment(){
         return true;
     }
      
-     //Finds the maximum booking no in the database and adds one to that number to create a new booking no.
+     /**
+      * Finds the maximum booking no in the database and adds one to that number to create a new booking no. 
+      * @return 
+      */
     public int getBookingNo(){
         int i = GretaTheDBManager.getMaxBookingNo();
         return i+1;
     }
-    
-   public DefaultTableModel bookingPassTable(){
-        //TODO na i upplysingar um passenger og setja i Tablemodel og skila
-        //getPassenger
-        String col[] = {"name","SSno","bookingNo"};
-        DefaultTableModel Tablemodel = new DefaultTableModel(col, 0);
-        
-        /*for (int i = 0; i< passInfo.size(); i++){
-            String passName = passInfo.get(i).getName();
-            String passSSno = passInfo.get(i).getSSno();
-            Object[] data = {passName, passSSno};
-             Tablemodel.addRow(data);
-        }*/
-        return Tablemodel;
-   }
-
+   
+    /**
+     * 
+     * @param bookingnr
+     * @return 
+     */
     public ArrayList bookingFlightTable(int bookingnr){
-        //TODO na i upplysingar um flug og setja i tablemodel og skila
         //getFlight
         ArrayList<Flight>bookingFlight = new ArrayList<>();
         ArrayList<Booking> booking = new ArrayList<>();
@@ -129,14 +111,6 @@ public class BookingService {
         } catch(Exception e){
             System.out.println("bookingFlightTable "+ e);
         }
-        
-        //bookingFlight1 = GretaTheDBManager.returnBooking(bookingnr).get(1);
-        //booking = GretaTheDBManager.returnBooking(bookingnr).get(1);
-        //passenger = GretaTheDBManager.returnBooking(bookingnr, 3).get(2);
-        
-        //nota index til að vita hvaða arraylist við viljum nota
-        //mogulega sleppa booking og hafa bara sér fall fyrir það
-        //gera lykju til að búa til töflu fyrir hvert table
         
         String col[] = {"Airline", "Date", "From", "To", "Departing Time", "Arriving Time"};
         DefaultTableModel TablemodelFlight = new DefaultTableModel(col, 0);
