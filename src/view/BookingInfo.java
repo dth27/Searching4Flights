@@ -90,7 +90,7 @@ public class BookingInfo extends javax.swing.JDialog {
             }
         });
 
-        jname1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jname1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jname1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jname2.setToolTipText("");

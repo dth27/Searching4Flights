@@ -144,7 +144,7 @@ public class ticketView extends javax.swing.JDialog {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Check-in starts 1 hour before departure time and closes 10 minutes before departure time. \nIt is necessary to bring the booking number and an ID(a credit/debit card with id-number and a picture is satisfying). \n\nPassenger‘s baggage may only contain such articles necessary for wear, use, comfort or convenience in connection \nwith the trip. \n\nOn board the airline may have complimentary beverages such as water, coffee and tea.\nNo food is served on board so it is recommended to eat prior to the flight or bring food on board the aircraft.\n\nFor bagage allowance and other information please refer to the airline's website.");
+        jTextArea1.setText("Check-in starts 1 hour before departure time and closes 10 minutes before departure time. \nIt is necessary to bring the booking number and an ID(a credit/debit card with id-number and a picture is satisfying). \n\nPassenger‘s baggage may only contain such articles necessary for wear, use, comfort or convenience in connection \nwith the trip. \n\nOn board the airline may have complimentary beverages such as water, coffee and tea.\nNo food is served on board so it is recommended to eat prior to the flight or bring food on board the aircraft.\n\nFor baggage allowance and other information please refer to the airline's website.");
         jScrollPane3.setViewportView(jTextArea1);
 
         jLabel4.setText("Additional information:");

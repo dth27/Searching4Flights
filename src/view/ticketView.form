@@ -238,7 +238,7 @@
             <Property name="editable" type="boolean" value="false"/>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="Check-in starts 1 hour before departure time and closes 10 minutes before departure time. &#xa;It is necessary to bring the booking number and an ID(a credit/debit card with id-number and a picture is satisfying). &#xa;&#xa;Passenger&#x2018;s baggage may only contain such articles necessary for wear, use, comfort or convenience in connection &#xa;with the trip. &#xa;&#xa;On board the airline may have complimentary beverages such as water, coffee and tea.&#xa;No food is served on board so it is recommended to eat prior to the flight or bring food on board the aircraft.&#xa;&#xa;For bagage allowance and other information please refer to the airline&apos;s website."/>
+            <Property name="text" type="java.lang.String" value="Check-in starts 1 hour before departure time and closes 10 minutes before departure time. &#xa;It is necessary to bring the booking number and an ID(a credit/debit card with id-number and a picture is satisfying). &#xa;&#xa;Passenger&#x2018;s baggage may only contain such articles necessary for wear, use, comfort or convenience in connection &#xa;with the trip. &#xa;&#xa;On board the airline may have complimentary beverages such as water, coffee and tea.&#xa;No food is served on board so it is recommended to eat prior to the flight or bring food on board the aircraft.&#xa;&#xa;For baggage allowance and other information please refer to the airline&apos;s website."/>
           </Properties>
         </Component>
       </SubComponents>

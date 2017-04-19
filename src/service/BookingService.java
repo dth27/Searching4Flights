@@ -17,7 +17,7 @@ public class BookingService {
     
     
    //Takes in the parameters from the BookingInfo Panel, to make a booking for the chosen flight
-    public int Flightbooking(int flightId, String[] PassName, int[] SSno, int[] phoneNo, int numbofPass){
+    public int Flightbooking(int flightId, String[] PassName, Long[] SSno, Long[] phoneNo, int numbofPass){
         System.out.println("Fer inn í Flightbooking");
         
         //Checks if there are enough available seats for the number of Passengers that want to book a flight
@@ -41,7 +41,7 @@ public class BookingService {
         return -1;
     }
        //Calls the DataBaseManager that updates the Passenger table in flug.db for each passenger and updates the seat availability for this flight
-     public void addPassenger(int flightId, int numbofPass, String Passname, int SSno, int phoneNo, int bookingNo){
+     public void addPassenger(int flightId, int numbofPass, String Passname, Long SSno, Long phoneNo, int bookingNo){
             System.out.println("Fer inn í addPassenger");
             
             GretaTheDBManager.updatePassenger(Passname, phoneNo, SSno, bookingNo);
@@ -98,9 +98,13 @@ public class BookingService {
         
         ArrayList<ArrayList> list = new ArrayList<>();
         list = GretaTheDBManager.returnBooking(bookingnr);
+        try{
         bookingFlight = list.get(1);
         booking = list.get(0);
         passenger = list.get(2);
+        } catch(Exception e){
+            System.out.println("bookingFlightTable "+ e);
+        }
         
         //bookingFlight1 = GretaTheDBManager.returnBooking(bookingnr).get(1);
         //booking = GretaTheDBManager.returnBooking(bookingnr).get(1);
@@ -124,23 +128,27 @@ public class BookingService {
             Object[] data = {airline, FlDate, departingFrom, destination, depTime, arrTime};
              TablemodelFlight.addRow(data);
         }
-        
+        try{
+        int book = booking.get(0).getBooking_id();
         
         String col2[] = {"Passenger name", "booking number", "Ticket price"};
         DefaultTableModel TablemodelBook = new DefaultTableModel(col2, 0);
         for (int i=0; i<passenger.size(); i++){
             String pass = passenger.get(i).getName();
-            int book = booking.get(i).getBooking_id();
             int price = booking.get(i).getTicket_price();
             Object[] data = {pass, book, price};
             
             TablemodelBook.addRow(data);
         }
+        
         ArrayList<DefaultTableModel> TyraBanks = new ArrayList<>();
         TyraBanks.add(TablemodelBook);
         TyraBanks.add(TablemodelFlight);
         
         return TyraBanks;
-        
+        }catch(Exception e){
+            System.out.println("Villa i getBookingId "+ e);
+        }
+        return null;
     }
 }

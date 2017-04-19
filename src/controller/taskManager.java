@@ -53,7 +53,9 @@ public class taskManager {
         hey = BuiBookingService.bookingFlightTable(bookingno);
         
         DefaultTableModel flightInfo = new DefaultTableModel();
+
         flightInfo = hey.get(0);
+
         DefaultTableModel passInfo = new DefaultTableModel();
         passInfo = hey.get(1);
         
@@ -99,13 +101,14 @@ public class taskManager {
             @Override
             public void actionPerformed(ActionEvent evt) {
             String[] passName = new String[nbr];
-            int[] passSSno = new int[nbr];
-            int[] passPhone = new int[nbr];
+            Long[] passSSno = new Long[nbr];
+            Long[] passPhone = new Long[nbr];
             int k = 0;
             for (int i = 0; i<nbr*3; i=i+3){
                         passName[k] = bookingSite.getInfoFields()[i].getText();
-                        passSSno[k] =Integer.parseInt(bookingSite.getInfoFields()[i+1].getText());
-                        passPhone[k] = Integer.parseInt(bookingSite.getInfoFields()[i+2].getText());
+                        passSSno[k] =Long.parseLong(bookingSite.getInfoFields()[i+1].getText());
+                        
+                        passPhone[k] = Long.parseLong(bookingSite.getInfoFields()[i+2].getText());
                         k=k+1;
             }
             int bookingno = BuiBookingService.Flightbooking(flightid, passName, passSSno, passPhone, nbr);

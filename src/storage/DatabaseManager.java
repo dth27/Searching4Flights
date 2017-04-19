@@ -83,7 +83,7 @@ public class DatabaseManager {
     }
   
     //Updates the Passenger table with the parameters that come in (makes a new row) 
-    public void updatePassenger(String name, int phoneno, int ssno, int bookingid){
+    public void updatePassenger(String name, Long phoneno, Long ssno, int bookingid){
         System.out.println("Fer inn í updatePassenger");
         Connection con = null;
         PreparedStatement statement = null;
@@ -96,8 +96,8 @@ public class DatabaseManager {
             
                 //Updates the table Passenger with the following parameters
   		statement.setString(1, name);
-		statement.setInt(2, ssno);
-		statement.setInt(3, phoneno);
+		statement.setLong(2, ssno);
+		statement.setLong(3, phoneno);
 		statement.setInt(4, bookingid);
 
 		statement.setQueryTimeout(30);
