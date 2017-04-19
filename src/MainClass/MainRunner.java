@@ -19,7 +19,8 @@ import service.*;
  *
  * @author Dottedsocks
  */
-//mainRunner sameinar allt og keyrir main fallið
+//MainRunner - the connector between view, controller and service
+//Only function: the main function
 public class MainRunner {
 
     /**

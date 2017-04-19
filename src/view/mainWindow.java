@@ -313,6 +313,8 @@ public int getNumberofPass(){
     numberofPpl = Integer.valueOf(jAmount.getSelectedItem().toString());
     return numberofPpl;
 }
+
+
 /**
  * creates view for the result from the search
  * @param model 
@@ -324,15 +326,17 @@ public void createResultView(TableModel model){
     jLeitarPanel.setVisible(false);
     jTableResults.setVisible(true);
 }
+
 /**
  * resets the view 
+ * -So that the user can enter a new search
  */
 public void resetView(){
         jResultPanel.setVisible(false);
         jAmount.setSelectedIndex(0);
         jToWhere.setSelectedIndex(0);
         jFromWhere.setSelectedIndex(0);
-        jWhen.setText("mm/dd/yyyy");
+        jWhen.setText("yyyy/mm/dd");
         jLeitarPanel.setVisible(true);  
 }
 

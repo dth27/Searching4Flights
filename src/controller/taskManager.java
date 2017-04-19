@@ -17,7 +17,7 @@ import javax.swing.table.TableModel;
  */
 //TaskManager: the ActionListener and implements the view package 
 //              Sends actions to bookingService or SearchService
-//              and gets results back that he sends to the view to update it
+//              Recieves results from the services and updates the view
 public class taskManager {
     SearchService JonaSearchService;
     BookingService BuiBookingService;
@@ -29,6 +29,12 @@ public class taskManager {
     int nbr; //To keep track on how many passengers the user wishes to buy tickets for
     int flightid; //To keep track of the flightID for booking
     
+    /**
+     * Constructor
+     * @param frontpage
+     * @param searchService
+     * @param bookingService 
+     */
     public taskManager (mainWindow frontpage, SearchService searchService, BookingService bookingService){
         this.Frontpage = frontpage;
         this.BuiBookingService = bookingService;
@@ -43,33 +49,31 @@ public class taskManager {
         Frontpage.resetView();
     }
     
+    /**
+     * Creates a new Dialog window to show the user his booking information
+     * Calls bookingService to get the booking formation
+     * @param bookingno 
+     */
     public void getTicketView(int bookingno){
 
         ticketview = new ticketView(Frontpage, true);
+        ArrayList<DefaultTableModel> ListofTableModels;
         
+        //Gets an arraylist of the two tables
+        //One for flight information and one for passenger information
+        ListofTableModels = BuiBookingService.bookingFlightTable(bookingno);
         
-        ArrayList<DefaultTableModel> hey = new ArrayList<>();
+        DefaultTableModel flightInfo;
+        DefaultTableModel passInfo;
         
-        hey = BuiBookingService.bookingFlightTable(bookingno);
+        flightInfo = ListofTableModels.get(0);
+        passInfo = ListofTableModels.get(1);
         
-        DefaultTableModel flightInfo = new DefaultTableModel();
-
-        flightInfo = hey.get(0);
-
-        DefaultTableModel passInfo = new DefaultTableModel();
-        passInfo = hey.get(1);
-        
+        //Send the update to ticketview and make it visible
         ticketview.createFlightview(flightInfo);
         ticketview.createPassView(passInfo);
-       
         ticketview.setVisible(true);
-        
-        //BuiBookingService.
-        
-        //ticketview.createFlightview(flightInfo);
-        //ticketview.createPassView(passInfo);
-        
-        
+
     }
     
     /**
@@ -80,9 +84,10 @@ public class taskManager {
      * @param fromWhere 
      */
     public void manageSearch(String toWhere, String when, int nbr, String fromWhere){
+        
         try{
-        TableModel mm = JonaSearchService.getFlights(toWhere, when, nbr, fromWhere);
-        Frontpage.createResultView(mm);    
+        TableModel tableofResults = JonaSearchService.getFlights(toWhere, when, nbr, fromWhere);
+        Frontpage.createResultView(tableofResults);    
         }catch (Exception e){
             System.out.println("manageSearch: "+e);
         }
@@ -95,28 +100,24 @@ public class taskManager {
      * @param id 
      */
     public void manageBooking(int id){
-       bookingSite = new BookingInfo(Frontpage, true, nbr);        
-       bookingSite.getBookButton().addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-            String[] passName = new String[nbr];
-            Long[] passSSno = new Long[nbr];
-            Long[] passPhone = new Long[nbr];
-            int k = 0;
-            for (int i = 0; i<nbr*3; i=i+3){
-                        passName[k] = bookingSite.getInfoFields()[i].getText();
-                        passSSno[k] =Long.parseLong(bookingSite.getInfoFields()[i+1].getText());
-                        
-                        passPhone[k] = Long.parseLong(bookingSite.getInfoFields()[i+2].getText());
-                        k=k+1;
-            }
-            int bookingno = BuiBookingService.Flightbooking(flightid, passName, passSSno, passPhone, nbr);
-            getTicketView(bookingno);
-           
-           
-        }
-            
+       bookingSite = new BookingInfo(Frontpage, true, nbr); 
+       //Actionlistener for the Book button
+       bookingSite.getBookButton().addActionListener((ActionEvent evt) -> {
+           //Get booking information to create booking
+           String[] passName = new String[nbr];
+           Long[] passSSno = new Long[nbr];
+           Long[] passPhone = new Long[nbr];
+           int k = 0;
+           for (int i = 0; i<nbr*3; i=i+3){
+               passName[k] = bookingSite.getInfoFields()[i].getText();
+               passSSno[k] =Long.parseLong(bookingSite.getInfoFields()[i+1].getText());
+               
+               passPhone[k] = Long.parseLong(bookingSite.getInfoFields()[i+2].getText());
+               k=k+1;
+           }
+           //Get the booking number to create the ticket view
+           int bookingno = BuiBookingService.Flightbooking(flightid, passName, passSSno, passPhone, nbr);
+           getTicketView(bookingno);
        });   
        bookingSite.setVisible(true);
     }    

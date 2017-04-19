@@ -9,7 +9,7 @@ import model.*;
 import storage.*;
 /**
  * 
- * @author Dottedsocksjkljn
+ * @author Dottedsocks
  */
 public class BookingService {
     Booking booking;

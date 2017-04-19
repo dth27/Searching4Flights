@@ -29,8 +29,6 @@ CREATE TABLE Passenger (
 
 CREATE TABLE Booking (
   Ticket_price int,
-  Booking_info int,
-  numbofPassenger int,
   bookingID int PRIMARY KEY,
   flight_id int,
   FOREIGN KEY (flight_id) REFERENCES Schedule (flight_id)
