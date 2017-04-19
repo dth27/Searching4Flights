@@ -211,7 +211,7 @@ public class DatabaseManager {
     }
     
     //TODO tjekka
-    public Passenger getPassenger(int ssno){
+    public Passenger getPassenger(int SSno){
         Connection con = null;
         Statement statement = null;
         Passenger pp = new Passenger();
@@ -222,10 +222,10 @@ public class DatabaseManager {
             statement = con.createStatement();
             statement.setQueryTimeout(30); 
 
-            rs = statement.executeQuery("select* from passenger where ssno="+ssno);
+            rs = statement.executeQuery("select* from passenger where ssno="+SSno);
             pp.setBookingId(rs.getInt("bookingId"));
             pp.setName(rs.getString("name"));
-            pp.setSSno(ssno);
+            pp.setSSno(SSno);
             
             return pp;    
             }
@@ -248,8 +248,9 @@ public class DatabaseManager {
         }
         return null;
     }
+    
     //Updates the booking table in flug.db with the new booking
-     public Booking createBooking(int bookingID, int flightID, int numbofpass){
+     public void createBooking(int bookingID, int flightID, int numbofpass){
          System.out.println("Fer inn í createBooking í DatabaseManager");
         Connection con = null;
         Statement statement = null;
@@ -288,8 +289,99 @@ public class DatabaseManager {
         }catch(Exception e){
             System.out.println("Villa i createBooking: " + e);
         }
-        return null;
     }
+     
+    
+     //Returns an ArrayList of ArrayList with information for the Booking Ticket
+     public ArrayList returnBooking(int bookingno){
+         //sækja allt sem þarf fyrir bookingno (flug, passengers o.s.fr.)
+         Connection con = null;
+         Statement statement = null;
+         ResultSet rsBooking = null;
+         ResultSet rsFlight = null;
+         ResultSet rsPassenger = null;
+         ArrayList<Booking>  theBooking = new ArrayList<>();
+         ArrayList<Flight>  theFlight = new ArrayList<>();
+         ArrayList<Passenger>  thePassenger = new ArrayList<>();
+         ArrayList<ArrayList> theList = new ArrayList<>();
+         
+         try {
+           try{
+            con = DriverManager.getConnection("jdbc:sqlite:flug.db");
+            statement = con.createStatement();
+            statement.setQueryTimeout(30); 
+
+            rsBooking = statement.executeQuery("SELECT * FROM Booking WHERE bookingID = "+bookingno);
+            int flightID = rsBooking.getInt("flight_id");   //þurfum að finna flightID til að geta sótt rsFlight;
+            System.out.println("FlightID: " + flightID);
+            Booking booking = new Booking();
+            booking.setBooking_id(rsBooking.getInt("bookingID"));
+            booking.setTicket_price(rsBooking.getInt("Ticket_price"));
+            System.out.println("Heildarverð miða: " + rsBooking.getInt("Ticket_price"));
+            theBooking.add(booking);
+            
+            
+            
+            rsFlight = statement.executeQuery("select * from flight join schedule on flight.flight_no = schedule.flight_no where flight_id = "+flightID);
+            Flight flight = new Flight();
+            flight.setFlight_no(rsFlight.getString("flight_NO"));
+            System.out.println("Flugnúmer er: " + rsFlight.getString("flight_NO"));
+            flight.setAirline(rsFlight.getString("airline"));
+            System.out.println("Airline er: " + rsFlight.getString("airline"));
+            flight.setFlight_date(rsFlight.getInt("flight_date"));
+            System.out.println("Dagsetning er: " + rsFlight.getInt("flight_date"));
+            flight.setDeparture_time(rsFlight.getInt("departure_time"));
+            System.out.println("Brottfarartími: " + rsFlight.getInt("departure_time"));
+            flight.setArrival_time(rsFlight.getInt("arrival_time"));
+            System.out.println("Komutími: " + rsFlight.getInt("arrival_time"));
+            flight.setDeparture_from(rsFlight.getString("departure_from"));
+            System.out.println("Frá: " + rsFlight.getString("departure_from"));
+            flight.setArrival_to(rsFlight.getString("arrival_to"));
+            System.out.println("Til: " + rsFlight.getString("arrival_to"));
+            theFlight.add(flight);
+            
+            rsPassenger = statement.executeQuery("SELECT * FROM Passenger WHERE bookingId = " +bookingno);
+            while(rsPassenger.next())
+             {
+                 Passenger pass = new Passenger();
+                 pass.setName(rsPassenger.getString("name"));
+                 System.out.println(rsPassenger.getString("name"));
+                 
+                 thePassenger.add(pass);
+             }
+            theList.add(theBooking);
+            theList.add(theFlight);
+            theList.add(thePassenger);
+            
+              
+           }finally{
+              if(rsBooking != null) {
+                  System.out.println("ReturnBooking: rsBooking er opið, loka því");
+                  rsBooking.close();
+              }
+               if(rsFlight != null) {
+                  System.out.println("ReturnBooking: rsFlight er opið, loka því");
+                  rsFlight.close();
+              }
+               if(rsPassenger != null) {
+                  System.out.println("ReturnBooking: rsPassenger er opið, loka því");
+                  rsPassenger.close();
+              }
+               if(statement != null) {
+                  System.out.println("ReturnBooking: statement er opið, loka því");
+                  statement.close();
+              }
+              if(con != null) {
+                  System.out.println("ReturnBooking: con er opið, loka því");
+                 con.close();
+              }
+          }     
+     
+        }catch(Exception e){
+            System.out.println("Villa i returnBooking: " + e);
+        }
+         return theList;
+     }
      
    //Finds the largest booking number so far and returns it
     public int getMaxBookingNo(){

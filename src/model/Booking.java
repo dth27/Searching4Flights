@@ -14,7 +14,7 @@ public class Booking {
     private int numbOfPass;
     private int Booking_id;
     private boolean paid;
-    //TODO paela i Paid breytunni
+    
     /**
      * @return the Ticket_price
      */
@@ -69,6 +69,20 @@ public class Booking {
      */
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+    
+    /**
+     * @return the Booking_id
+     */
+    public int getBooking_id() {
+        return Booking_id;
+    }
+
+    /**
+     * @param Booking_id the Booking_id to set
+     */
+    public void setBooking_id(int Booking_id) {
+        this.Booking_id = Booking_id;
     }
     
    

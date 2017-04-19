@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -42,11 +43,24 @@ public class taskManager {
         Frontpage.resetView();
     }
     
-    public void getTicketView(){
+    public void getTicketView(int bookingno){
+
         ticketview = new ticketView(Frontpage, true);
         
-        TableModel flightInfo;
-        TableModel passInfo;
+        
+        ArrayList<DefaultTableModel> hey = new ArrayList<>();
+        
+        hey = BuiBookingService.bookingFlightTable(bookingno);
+        
+        DefaultTableModel flightInfo = new DefaultTableModel();
+        flightInfo = hey.get(0);
+        DefaultTableModel passInfo = new DefaultTableModel();
+        passInfo = hey.get(1);
+        
+        ticketview.createFlightview(flightInfo);
+        ticketview.createPassView(passInfo);
+       
+        ticketview.setVisible(true);
         
         //BuiBookingService.
         
@@ -79,42 +93,30 @@ public class taskManager {
      * @param id 
      */
     public void manageBooking(int id){
-     // BuiBookingService.Flightbooking(meiriupll, PassName, ssno, meiriupll);
        bookingSite = new BookingInfo(Frontpage, true, nbr);        
-        
-        bookingSite.getBookButton().addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
+       bookingSite.getBookButton().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
             String[] passName = new String[nbr];
             int[] passSSno = new int[nbr];
             int[] passPhone = new int[nbr];
+            int k = 0;
             for (int i = 0; i<nbr*3; i=i+3){
-                System.out.println("nafn "+bookingSite.getInfoFields()[i].getText());
-                System.out.println("ssno "+Integer.parseInt(bookingSite.getInfoFields()[i+1].getText()));
-                System.out.println("phone "+Integer.parseInt(bookingSite.getInfoFields()[i+2].getText()));
-                for (int k=0; k<nbr; k++){
-                try{
-                    passName[k] = bookingSite.getInfoFields()[i].getText();
-                    passSSno[k] =Integer.parseInt(bookingSite.getInfoFields()[i+1].getText());
-                    passPhone[k] = Integer.parseInt(bookingSite.getInfoFields()[i+2].getText());
-            }catch (Exception err){
-                System.out.println("villa i booking "+err);
-                    }}}
-
-            BuiBookingService.Flightbooking(flightid, passName, passSSno, passPhone, nbr);
-            getTicketView();
-            bookingSite.setVisible(false);
-            bookingSite.dispose();  
+                        passName[k] = bookingSite.getInfoFields()[i].getText();
+                        passSSno[k] =Integer.parseInt(bookingSite.getInfoFields()[i+1].getText());
+                        passPhone[k] = Integer.parseInt(bookingSite.getInfoFields()[i+2].getText());
+                        k=k+1;
+            }
+            int bookingno = BuiBookingService.Flightbooking(flightid, passName, passSSno, passPhone, nbr);
+            getTicketView(bookingno);
+           
+           
+        }
             
-            
-           }
-       });
-            
-        bookingSite.setVisible(true); 
-        
-        
-    }
-    
+       });   
+       bookingSite.setVisible(true);
+    }    
     /**
      * Control implements the mainWindow view and adds actionListeners to the buttons
      * as wells decides what to do for every action
@@ -127,7 +129,7 @@ public class taskManager {
             String toWhere = Frontpage.getToWhere();
             String when = Frontpage.getWhen();
             nbr = Frontpage.getNumberofPass();
-            //sends the input to manageSearch
+            //sends the input to manageSearch 
             manageSearch(toWhere, when, nbr, fromWhere);        
         };
         Frontpage.getSearchButton().addActionListener(actionListener);

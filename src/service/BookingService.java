@@ -17,7 +17,7 @@ public class BookingService {
     
     
    //Takes in the parameters from the BookingInfo Panel, to make a booking for the chosen flight
-    public void Flightbooking(int flightId, String[] PassName, int[] SSno, int[] phoneNo, int numbofPass){
+    public int Flightbooking(int flightId, String[] PassName, int[] SSno, int[] phoneNo, int numbofPass){
         System.out.println("Fer inn í Flightbooking");
         
         //Checks if there are enough available seats for the number of Passengers that want to book a flight
@@ -33,10 +33,12 @@ public class BookingService {
             for(int i=0;i<numbofPass;i++) {            
                  addPassenger(flightId, numbofPass, PassName[i], SSno[i], phoneNo[i], bookingno);
              }
+            return bookingno;
             
         }else {
             System.out.println("No seats are available for this request");
         }
+        return -1;
     }
        //Calls the DataBaseManager that updates the Passenger table in flug.db for each passenger and updates the seat availability for this flight
      public void addPassenger(int flightId, int numbofPass, String Passname, int SSno, int phoneNo, int bookingNo){
@@ -71,9 +73,7 @@ public class BookingService {
         int i = GretaTheDBManager.getMaxBookingNo();
         return i+1;
     }
-
-    //Takes in an Array of PassengerInfo made by calling the method getPassenger with the relevant bookingNo
-    //And creates a TableModel containing the array of Passengers   
+    
    public DefaultTableModel bookingPassTable(){
         //TODO na i upplysingar um passenger og setja i Tablemodel og skila
         //getPassenger
@@ -89,30 +89,58 @@ public class BookingService {
         return Tablemodel;
    }
 
-    
-     //TODO þetta virkar ekki rétt þ.e. flightInfo virkar ekki, svo ég er að gera þetta eitthvað vitlaust
-    //Takes in an Array of Flight made by alling the method getFlight with the relevant bookingNo
-    //And creates a TableModel containing the array of Passengers   
-    public DefaultTableModel bookingFlightTable(){
+    public ArrayList bookingFlightTable(int bookingnr){
         //TODO na i upplysingar um flug og setja i tablemodel og skila
         //getFlight
+        ArrayList<Flight>bookingFlight = new ArrayList<>();
+        ArrayList<Booking> booking = new ArrayList<>();
+        ArrayList<Passenger>passenger = new ArrayList<>();
         
-        String col[] = {"arrivingTime","airline","departingTime", "date", "price", "destination", "departingfrom", "flight number"};
-        DefaultTableModel Tablemodel = new DefaultTableModel(col, 0);
+        ArrayList<ArrayList> list = new ArrayList<>();
+        list = GretaTheDBManager.returnBooking(bookingnr);
+        bookingFlight = list.get(1);
+        booking = list.get(0);
+        passenger = list.get(2);
         
-      /*  for (int i = 0; i< flightInfo.size(); i++){
-            int arrTime = flightInfo.get(i).getArrival_time();
-            String airline = flightInfo.get(i).getAirline();
-            int depTime = flightInfo.get(i).getDeparture_time();
-            int FlDate = flightInfo.get(i).getFlight_date();
-            int ticketPrice = flightInfo.get(i).getTicket_price();
-            String destination = flightInfo.get(i).getArrival_to();
-            String departingFrom = flightInfo.get(i).getDeparture_from();
-            String flightNO = flightInfo.get(i).getFlight_no();
-            Object[] data = {arrTime, airline, depTime, FlDate, ticketPrice, destination, 
-                               departingFrom, flightNO};
-             Tablemodel.addRow(data);
-        }*/
-        return Tablemodel;
+        //bookingFlight1 = GretaTheDBManager.returnBooking(bookingnr).get(1);
+        //booking = GretaTheDBManager.returnBooking(bookingnr).get(1);
+        //passenger = GretaTheDBManager.returnBooking(bookingnr, 3).get(2);
+        
+        //nota index til að vita hvaða arraylist við viljum nota
+        //mogulega sleppa booking og hafa bara sér fall fyrir það
+        //gera lykju til að búa til töflu fyrir hvert table
+        
+        String col[] = {"Airline", "Date", "From", "To", "Departing Time", "Arriving Time"};
+        DefaultTableModel TablemodelFlight = new DefaultTableModel(col, 0);
+        
+        for (int i = 0; i< bookingFlight.size(); i++){
+            int arrTime = bookingFlight.get(i).getArrival_time();
+            String airline = bookingFlight.get(i).getAirline();
+            int depTime = bookingFlight.get(i).getDeparture_time();
+            int FlDate = bookingFlight.get(i).getFlight_date();
+
+            String destination = bookingFlight.get(i).getArrival_to();
+            String departingFrom = bookingFlight.get(i).getDeparture_from();
+            Object[] data = {airline, FlDate, departingFrom, destination, depTime, arrTime};
+             TablemodelFlight.addRow(data);
+        }
+        
+        
+        String col2[] = {"Passenger name", "booking number", "Ticket price"};
+        DefaultTableModel TablemodelBook = new DefaultTableModel(col2, 0);
+        for (int i=0; i<passenger.size(); i++){
+            String pass = passenger.get(i).getName();
+            int book = booking.get(i).getBooking_id();
+            int price = booking.get(i).getTicket_price();
+            Object[] data = {pass, book, price};
+            
+            TablemodelBook.addRow(data);
+        }
+        ArrayList<DefaultTableModel> TyraBanks = new ArrayList<>();
+        TyraBanks.add(TablemodelBook);
+        TyraBanks.add(TablemodelFlight);
+        
+        return TyraBanks;
+        
     }
 }

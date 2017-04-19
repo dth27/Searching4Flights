@@ -46,6 +46,7 @@ public class SearchService {
     }
 
     /**
+     * @param numb
      * @return DefaultTablemodel
      * the search results in a table model
      */
