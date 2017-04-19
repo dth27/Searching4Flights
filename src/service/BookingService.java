@@ -17,6 +17,15 @@ public class BookingService {
     
     
    //Takes in the parameters from the BookingInfo Panel, to make a booking for the chosen flight
+    /**
+     * 
+     * @param flightId
+     * @param PassName
+     * @param SSno
+     * @param phoneNo
+     * @param numbofPass
+     * @return 
+     */
     public int Flightbooking(int flightId, String[] PassName, Long[] SSno, Long[] phoneNo, int numbofPass){
         System.out.println("Fer inn í Flightbooking");
         
@@ -41,7 +50,16 @@ public class BookingService {
         return -1;
     }
        //Calls the DataBaseManager that updates the Passenger table in flug.db for each passenger and updates the seat availability for this flight
-     public void addPassenger(int flightId, int numbofPass, String Passname, Long SSno, Long phoneNo, int bookingNo){
+    /**
+     * 
+     * @param flightId
+     * @param numbofPass
+     * @param Passname
+     * @param SSno
+     * @param phoneNo
+     * @param bookingNo 
+     */
+    public void addPassenger(int flightId, int numbofPass, String Passname, Long SSno, Long phoneNo, int bookingNo){
             System.out.println("Fer inn í addPassenger");
             
             GretaTheDBManager.updatePassenger(Passname, phoneNo, SSno, bookingNo);
@@ -49,6 +67,12 @@ public class BookingService {
      }
         
  //Calls the DataBaseManager that creates a new Booking by calling the DataBaseManager   
+     /**
+      * 
+      * @param numbofPass
+      * @param flightId
+      * @param bookingno 
+      */
      public void createBooking(int numbofPass, int flightId, int bookingno){
          System.out.println("fer inn í createBooking í BookingService");
          GretaTheDBManager.createBooking(bookingno, flightId, numbofPass); 
