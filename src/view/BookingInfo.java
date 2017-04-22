@@ -4,6 +4,7 @@ package view;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
+
 /**
  *
  * @author Dottedsocks
@@ -44,6 +45,7 @@ public class BookingInfo extends javax.swing.JDialog {
         ok = true;
         return jBook;
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Arrays;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -22,7 +22,7 @@ public class taskManager {
     SearchService JonaSearchService;
     BookingService BuiBookingService;
     private final mainWindow Frontpage;
-    private ActionListener actionListener, actionListener2, actionListener3;
+    private ActionListener actionListener, actionListener2;
     private MouseListener mouseListener;
     private BookingInfo bookingSite;
     private ticketView ticketview;
@@ -88,8 +88,14 @@ public class taskManager {
         try{
         TableModel tableofResults = JonaSearchService.getFlights(toWhere, when, nbr, fromWhere);
         Frontpage.createResultView(tableofResults);    
+        if (tableofResults==null) {
+            throw new Exception();
+            
+        }
         }catch (Exception e){
             System.out.println("manageSearch: "+e);
+            JOptionPane.showMessageDialog(null, "Sorry, no flights were found that fit your search requirement", "Whoops!", JOptionPane.ERROR_MESSAGE);
+               
         }
     }
     
@@ -104,6 +110,7 @@ public class taskManager {
        //Actionlistener for the Book button
        bookingSite.getBookButton().addActionListener((ActionEvent evt) -> {
            //Get booking information to create booking
+           try{
            String[] passName = new String[nbr];
            Long[] passSSno = new Long[nbr];
            Long[] passPhone = new Long[nbr];
@@ -117,9 +124,16 @@ public class taskManager {
            }
            //Get the booking number to create the ticket view
            int bookingno = BuiBookingService.Flightbooking(flightid, passName, passSSno, passPhone, nbr);
+           
            getTicketView(bookingno);
+           }catch(Exception emd){
+               System.out.println("manageBooking: " +emd);
+               JOptionPane.showMessageDialog(null, "Please check if all fields are filled out correctly", "Something went wrong", JOptionPane.ERROR_MESSAGE);
+               
+               }
        });   
        bookingSite.setVisible(true);
+       
     }    
     /**
      * Control implements the mainWindow view and adds actionListeners to the buttons
@@ -129,12 +143,28 @@ public class taskManager {
         Frontpage.setVisible(true);
         //ActionListener for the search button 
         actionListener = (ActionEvent e) -> {
+            //Get the search parameters from the interface
+            try{
             String fromWhere = Frontpage.getFromWhere();
             String toWhere = Frontpage.getToWhere();
-            String when = Frontpage.getWhen();
             nbr = Frontpage.getNumberofPass();
+            String k = Frontpage.getDateChooser();
+            
+            System.out.println(k);
+            if ("yyyymmdd".equals(k)){
+                throw new Exception();
+            }
+            if ("Choose airport".equals(fromWhere)|| "Choose airport".equals(toWhere)){
+                throw new Exception();
+            }
             //sends the input to manageSearch 
-            manageSearch(toWhere, when, nbr, fromWhere);        
+            manageSearch(toWhere, k, nbr, fromWhere); 
+            }catch(Exception em){
+                System.out.println("control actionListener "+em);
+                JOptionPane.showMessageDialog(null, "Did you choose a date, an arrival airport and a departure airport?"
+                        +System.lineSeparator()+ "If This persists please contact the front desk", "Something is missing!", JOptionPane.ERROR_MESSAGE);
+            }
+            
         };
         Frontpage.getSearchButton().addActionListener(actionListener);
         
@@ -143,7 +173,7 @@ public class taskManager {
             backToSearch();
         };
         Frontpage.getBackSearchButton().addActionListener(actionListener2);           
-        
+
         //mouseListener for the JTable
         mouseListener = new MouseListener(){
             @Override

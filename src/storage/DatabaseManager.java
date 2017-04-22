@@ -57,21 +57,21 @@ public class DatabaseManager {
                 System.out.println(flug.getSeats());
                 System.out.println(flug);
              }
+            
           }
           finally{
               if(rs != null) {
-                  System.out.println("FindFlights: rs er opið, loka því");
                   rs.close();
               }
               if(statement != null) {
-                  System.out.println("FindFlights: statement er opið, loka því");
                   statement.close();
               }
               if(con != null) {
-                  System.out.println("FindFlights: conCon er opið, loka því");
                  con.close();
               }
+              
           }
+          
         }
         catch(SQLException e)
         {
@@ -79,10 +79,20 @@ public class DatabaseManager {
           // it probably means no database file is found
           System.err.println(e.getMessage());
         }
-        return theFlights;
+        try{
+        if (theFlights.isEmpty()){
+            throw new Exception();
+        }else{
+            return theFlights;
+        }
+        }catch(Exception e){
+            System.out.println("Search result for Flights is empty "+e);
+            
+        }
+        return null;
     }
   
-     /**
+    /**
       * Updates the Passenger table with the parameters that come in (makes a new row) 
       * @param name
       * @param phoneno

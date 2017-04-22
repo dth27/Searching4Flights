@@ -14,6 +14,12 @@ import view.*;
 import controller.taskManager;
 import service.*;
 
+//TODO fá inn calender
+//TODO tjekka á kt (na í koda sem Kristin var búin að finna
+//TODO senda email? Þarf að geta gert eitthvað með miðan
+//TODO Result page sýni líka önnur flug? Sýni öll flug í annarri töflu
+//TODO skoða javaFX 
+//TODO peningamál, -sleppa. Hvort sem er engin sem gerði það
 
 /**
  *

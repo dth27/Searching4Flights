@@ -77,10 +77,6 @@ public class BookingService {
          GretaTheDBManager.createBooking(bookingno, flightId, numbofPass); 
      }
 
-     //TODO 
-     public boolean updatePayment(){
-        return true;
-    }
      
      /**
       * Finds the maximum booking no in the database and adds one to that number to create a new booking no. 
@@ -92,21 +88,21 @@ public class BookingService {
     }
    
     /**
-     * 
+     * Creates tablemodels with data for ticketView (ie passengerinfo and so on)
      * @param bookingnr
      * @return 
      */
     public ArrayList bookingFlightTable(int bookingnr){
         //getFlight
         ArrayList<Flight>bookingFlight = new ArrayList<>();
-        ArrayList<Booking> booking = new ArrayList<>();
+        ArrayList<Booking> BookingList = new ArrayList<>();
         ArrayList<Passenger>passenger = new ArrayList<>();
         
-        ArrayList<ArrayList> list = new ArrayList<>();
+        ArrayList<ArrayList> list;
         list = GretaTheDBManager.returnBooking(bookingnr);
         try{
         bookingFlight = list.get(1);
-        booking = list.get(0);
+        BookingList = list.get(0);
         passenger = list.get(2);
         } catch(Exception e){
             System.out.println("bookingFlightTable "+ e);
@@ -127,13 +123,13 @@ public class BookingService {
              TablemodelFlight.addRow(data);
         }
         try{
-        int book = booking.get(0).getBooking_id();
+        int book = BookingList.get(0).getBooking_id();
         
-        String col2[] = {"Passenger name", "booking number", "Ticket price"};
+        String col2[] = {"Passenger name", "Booking number", "Ticket price"};
         DefaultTableModel TablemodelBook = new DefaultTableModel(col2, 0);
         for (int i=0; i<passenger.size(); i++){
             String pass = passenger.get(i).getName();
-            int price = booking.get(i).getTicket_price();
+            int price = BookingList.get(i).getTicket_price();
             Object[] data = {pass, book, price};
             
             TablemodelBook.addRow(data);
