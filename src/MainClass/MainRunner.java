@@ -13,6 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import view.*;
 import controller.taskManager;
 import service.*;
+import com.toedter.calendar.*;
 
 //TODO fá inn calender
 //TODO tjekka á kt (na í koda sem Kristin var búin að finna
